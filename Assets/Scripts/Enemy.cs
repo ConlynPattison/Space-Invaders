@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class EnemyComplete : MonoBehaviour
 {
+
+    public int scorePerHit = 0;
+
     public delegate void EnemyDestroyed(int score);
     public static event EnemyDestroyed OnEnemyAboutToBeDestroyed;
     //-----------------------------------------------------------------------------
@@ -10,9 +13,10 @@ public class EnemyComplete : MonoBehaviour
     {
         Debug.Log("Ouch!");
     
-        OnEnemyAboutToBeDestroyed(50);
+        OnEnemyAboutToBeDestroyed(scorePerHit);
         // todo - trigger death animation
         Destroy(collision.gameObject); // destroy bullet
+        Destroy(gameObject);
     }
 
     // private void OnTriggerEnter2D(Collider2D col)
