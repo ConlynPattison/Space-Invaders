@@ -1,6 +1,12 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
+using Quaternion = UnityEngine.Quaternion;
+using Vector2 = UnityEngine.Vector2;
+using Vector3 = UnityEngine.Vector3;
 
 public class SpawnerController : MonoBehaviour
 {
@@ -10,29 +16,86 @@ public class SpawnerController : MonoBehaviour
     public GameObject EnemyBottomPrefab;
     public GameObject EnemyParent;
 
-    public float EnemyScale = 3f;
+    public float dropCoolDownSeconds = 3f;
+    public float downwardMovementMult = 0.5f;
+    public float baseSpeedPerSecond = 0.1f;
+    public float enemyDestroyedSpeedMult = 0.01f;
 
-    private int _roundsCompleted;
+    // private int _roundsCompleted;
     private int _enemiesPerRow;
+    private bool _onCoolDown;
     private float _distanceBetweenEnemies;
-    private bool _movingRight;
+    private float _endDownTime;
+    private float _currentSpeed;
     private Transform _rootTransform;
+    private Rigidbody2D _rigidbody2D;
+    private Vector3 _startingPosition;
+
+    private static bool _movingRight = true;
 
     // Start is called before the first frame update
     void Start()
     {
-        _roundsCompleted = 0;
-        _distanceBetweenEnemies = 0.75f;
+        // _roundsCompleted = 0;
         _enemiesPerRow = 11;
-        _movingRight = true;
+        _distanceBetweenEnemies = 0.75f;
+        _currentSpeed = baseSpeedPerSecond;
+        _onCoolDown = false;
         _rootTransform = EnemyParent.transform;
+        _rigidbody2D = GetComponent<Rigidbody2D>();
+        _startingPosition = transform.position;
+        Border.OnEnemyHitBorder += OnBorderHit;
+        EnemyComplete.OnEnemyAboutToBeDestroyed += OnEnemyDestroyed;
         SpawnEnemies();
     }
-    
-    
+
+    // todo: moving the enemies root (this) over time
+    // todo: remove time from the cooldown as seconds until it is == 0
+    // todo: have a cooldown for the downward movement
+    private void FixedUpdate()
+    {
+        if (_movingRight)
+        {
+            _rigidbody2D.velocity = Vector2.right * _currentSpeed;
+        }
+        else
+        {
+            _rigidbody2D.velocity = Vector2.left * _currentSpeed;
+        }
+
+        if (_onCoolDown && Time.realtimeSinceStartup >= _endDownTime)
+        {
+            _onCoolDown = false;
+            _endDownTime = 0f;
+        }
+    }
+
+    private void OnBorderHit()
+    {
+        if (_onCoolDown)
+            return;
+        
+        // not on cool down
+        _onCoolDown = true;
+        _endDownTime = Time.realtimeSinceStartup + dropCoolDownSeconds;
+        
+        MoveDown();
+    }
+
+    private void OnEnemyDestroyed(int score)
+    {
+        _currentSpeed += enemyDestroyedSpeedMult;
+    }
+
+    private void MoveDown()
+    {
+        transform.position += Vector3.down * downwardMovementMult;
+    }
+
+    // todo: reformat if time permits
     private void SpawnEnemies()
     {
-        Vector3 spawnerLocation = transform.position;
+        Vector3 spawnerLocation = transform.position; // will change based on rounds completed
         
         // Top row
         for (float x = 0; x < _enemiesPerRow * _distanceBetweenEnemies; x += _distanceBetweenEnemies)
@@ -58,9 +121,13 @@ public class SpawnerController : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
+    public static bool IsMovingRight()
     {
-        
+        return _movingRight;
+    }
+
+    public static void SetMovingRight(bool isMovingRight)
+    {
+        _movingRight = isMovingRight;
     }
 }

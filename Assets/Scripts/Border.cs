@@ -1,18 +1,36 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Border : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+
+    public delegate void EnemyHitBorder();
+    public static event EnemyHitBorder OnEnemyHitBorder;
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        Debug.Log("Trigger Entered");
+        
+        if (other.CompareTag("Player"))
+            return;
+        
+        if (CompareTag("LeftBorder"))
+        {
+            SpawnerController.SetMovingRight(true);
+            OnEnemyHitBorder();
+        } 
+        else if (CompareTag("RightBorder"))
+        {
+            SpawnerController.SetMovingRight(false);
+            OnEnemyHitBorder();
+        }
     }
 }
