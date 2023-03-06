@@ -1,22 +1,30 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Player : MonoBehaviour
 {
-  public GameObject bullet;
+    public GameObject bulletPrefab;
+    public Transform shootOffsetTransform;
 
-  public Transform shottingOffset;
-    // Update is called once per frame
+    private Animator playerAnimator;
+
+    //-----------------------------------------------------------------------------
+    void Start()
+    {
+        playerAnimator = GetComponent<Animator>();
+    }
+
+    //-----------------------------------------------------------------------------
     void Update()
     {
-      if (Input.GetKeyDown(KeyCode.Space))
-      {
-        GameObject shot = Instantiate(bullet, shottingOffset.position, Quaternion.identity);
-        Debug.Log("Bang!");
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            // todo - trigger a "shoot" on the animator
+            playerAnimator.SetTrigger("ShootTrigger");
+            GameObject shot = Instantiate(bulletPrefab, shootOffsetTransform.position, Quaternion.identity);
+            Debug.Log("Bang!");
 
-        Destroy(shot, 3f);
-
-      }
+            Destroy(shot, 3f);
+        }
     }
 }

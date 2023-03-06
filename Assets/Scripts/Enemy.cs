@@ -1,23 +1,26 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public class EnemyComplete : MonoBehaviour
 {
-
-    public delegate void EnemyDestroyed(int score=0); // new custom type
-
-    public static event EnemyDestroyed OnEnemyAboutToBeDestroyed; // mechanism for publishing what happened for those subscribed
-
-    public int pointValue = 50;
-    // Start is called before the first frame update
+    public delegate void EnemyDestroyed(int score);
+    public static event EnemyDestroyed OnEnemyAboutToBeDestroyed;
+    //-----------------------------------------------------------------------------
     void OnCollisionEnter2D(Collision2D collision)
     {
-      Debug.Log("Ouch!");
-      
-      OnEnemyAboutToBeDestroyed(50);
-      OnEnemyAboutToBeDestroyed.Invoke();
-
-      Destroy(gameObject);
+        Debug.Log("Ouch!");
+    
+        OnEnemyAboutToBeDestroyed(50);
+        // todo - trigger death animation
+        Destroy(collision.gameObject); // destroy bullet
     }
+
+    // private void OnTriggerEnter2D(Collider2D col)
+    // {
+    //     Debug.Log("Ouch!");
+    //
+    //     // todo - trigger death animation
+    //     OnEnemyAboutToBeDestroyed(50);
+    //     Destroy(col.gameObject); // destroy bullet
+    // }
 }
