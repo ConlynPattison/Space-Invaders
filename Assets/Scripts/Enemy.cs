@@ -39,7 +39,7 @@ public class EnemyComplete : MonoBehaviour
             return;
 
         RaycastHit2D hitInfo = Physics2D.Raycast(transform.position + Vector3.down*castOffset, Vector2.down, 8f);
-        if (!hitInfo.collider.CompareTag("Enemy"))
+        if (hitInfo.collider != null && !hitInfo.collider.CompareTag("Enemy"))
         {
             Debug.DrawLine(transform.position + Vector3.down * castOffset, transform.position + Vector3.down * 8f, Color.magenta);
             if (Random.Range(0f, 1000f) <= _shootChance)

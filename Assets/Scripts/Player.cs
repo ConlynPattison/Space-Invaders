@@ -1,4 +1,5 @@
 ﻿using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -6,9 +7,12 @@ public class Player : MonoBehaviour
 {
     public GameObject bulletPrefab;
     public Transform shootOffsetTransform;
+    public TextMeshProUGUI livesText;
     public float unitsPerSecond = 15f;
+    public int initalLives = 3;
     
     private Rigidbody2D _rigidBody2D;
+    private int _livesRemaining;
 
     // private Animator playerAnimator;
 
@@ -17,6 +21,8 @@ public class Player : MonoBehaviour
     {
         // playerAnimator = GetComponent<Animator>();
         _rigidBody2D = GetComponent<Rigidbody2D>();
+        livesText.text = $"{initalLives}";
+        _livesRemaining = initalLives;
     }
 
     //-----------------------------------------------------------------------------
@@ -44,5 +50,23 @@ public class Player : MonoBehaviour
         Debug.Log("Bang!");
 
         Destroy(shot, 3f);
+    }
+
+    private void OnCollisionEnter2D(Collision2D col)
+    {
+        if (!col.gameObject.CompareTag("Enemy"))
+            return;
+        
+        Destroy(col.gameObject);
+        
+        _livesRemaining--;
+        if (_livesRemaining < 0)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            livesText.text = $"{_livesRemaining}";
+        }
     }
 }
