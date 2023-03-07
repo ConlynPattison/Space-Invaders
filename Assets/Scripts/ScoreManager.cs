@@ -20,7 +20,9 @@ public class ScoreManager : MonoBehaviour
     private void EnemyOnOnEnemyAboutToBeDestroyed(int score)
     {
         _score += score;
+        var formattedScore = _score.ToString("0000");
+        
         Debug.Log($"event received for tallying the score: {score}");
-        scoreText.text = $"SCORE\n{_score}";
+        scoreText.text = $"SCORE\n{formattedScore}";
     }
 }

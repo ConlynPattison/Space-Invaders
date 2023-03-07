@@ -14,8 +14,8 @@ GameObject:
   - component: {fileID: 810830120876319640}
   - component: {fileID: -3145703560999777727}
   m_Layer: 0
-  m_Name: EnemyTop
-  m_TagString: Enemy
+  m_Name: EnemyRandom
+  m_TagString: Random
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -71,14 +71,14 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.16, y: 0.16}
+    oldSize: {x: 0.48, y: 0.21}
     newSize: {x: 2.56, y: 2.56}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.2, y: 0.2}
+  m_Size: {x: 0.5, y: 0.2}
   m_EdgeRadius: 0
 --- !u!114 &9146394644734855183
 MonoBehaviour:
@@ -92,10 +92,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 796aad014e2107342a60ed88af81c745, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scorePerHit: 30
+  scorePerHit: -1
   randomEnemySpeed: 3
-  castOffset: 0.4
-  bulletPrefab: {fileID: 2457785739244962049, guid: 018f51e2bc62d564e811775caca2cf7f, type: 3}
+  castOffset: 0.25
+  bulletPrefab: {fileID: 2457785739244962049, guid: d4511b14daaa37c468a74ed386b2583f, type: 3}
 --- !u!212 &810830120876319640
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -137,7 +137,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -1389466295, guid: 17f01d3a932e06f4d91dc8a8b68f00e9, type: 3}
+  m_Sprite: {fileID: 820434860, guid: 17f01d3a932e06f4d91dc8a8b68f00e9, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

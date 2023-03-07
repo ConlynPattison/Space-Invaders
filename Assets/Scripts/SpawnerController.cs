@@ -14,7 +14,9 @@ public class SpawnerController : MonoBehaviour
     public GameObject EnemyTopPrefab;
     public GameObject EnemyMiddlePrefab;
     public GameObject EnemyBottomPrefab;
+    public GameObject EnemyRandomPrefab;
     public GameObject EnemyParent;
+    public Transform EnemyRandomSpawn;
 
     public float dropCoolDownSeconds = 3f;
     public float downwardMovementMult = 0.5f;
@@ -47,11 +49,9 @@ public class SpawnerController : MonoBehaviour
         Border.OnEnemyHitBorder += OnBorderHit;
         EnemyComplete.OnEnemyAboutToBeDestroyed += OnEnemyDestroyed;
         SpawnEnemies();
+        StartCoroutine(RandomCoroutine());
     }
 
-    // todo: moving the enemies root (this) over time
-    // todo: remove time from the cooldown as seconds until it is == 0
-    // todo: have a cooldown for the downward movement
     private void FixedUpdate()
     {
         if (_movingRight)
@@ -67,6 +67,17 @@ public class SpawnerController : MonoBehaviour
         {
             _onCoolDown = false;
             _endDownTime = 0f;
+        }
+    }
+
+    IEnumerator RandomCoroutine()
+    {
+        while (true)
+        {
+            Debug.Log("starting");
+            yield return new WaitForSeconds(5f);
+            Instantiate(EnemyRandomPrefab, new Vector3(EnemyRandomSpawn.position.x, EnemyRandomSpawn.position.y, 0), Quaternion.identity);
+            Debug.Log("ending");
         }
     }
 

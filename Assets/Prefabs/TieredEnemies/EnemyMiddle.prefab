@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: -5564612068953965743}
   m_Layer: 0
   m_Name: EnemyMiddle
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -93,6 +93,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scorePerHit: 20
+  randomEnemySpeed: 3
+  castOffset: 0.4
+  bulletPrefab: {fileID: 2457785739244962049, guid: 018f51e2bc62d564e811775caca2cf7f, type: 3}
 --- !u!212 &3464104658115087264
 SpriteRenderer:
   m_ObjectHideFlags: 0

@@ -25,16 +25,24 @@ public class Player : MonoBehaviour
         // Shoot
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            // playerAnimator.SetTrigger("ShootTrigger");
-            GameObject shot = Instantiate(bulletPrefab, shootOffsetTransform.position, Quaternion.identity);
-            Debug.Log("Bang!");
-
-            Destroy(shot, 3f);
+            ShotRequested();
         }
     }
 
     private void FixedUpdate()
     {
         _rigidBody2D.velocity = Input.GetAxis("Horizontal") * unitsPerSecond * Vector2.right;
+    }
+
+    private void ShotRequested()
+    {
+        // playerAnimator.SetTrigger("ShootTrigger");
+        if (shootOffsetTransform.hierarchyCount != 2)
+            return;
+        
+        GameObject shot = Instantiate(bulletPrefab, shootOffsetTransform.position, Quaternion.identity, shootOffsetTransform);
+        Debug.Log("Bang!");
+
+        Destroy(shot, 3f);
     }
 }

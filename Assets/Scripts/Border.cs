@@ -19,7 +19,7 @@ public class Border : MonoBehaviour
     {
         Debug.Log("Trigger Entered");
         
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") || other.CompareTag("Random"))
             return;
         
         if (CompareTag("LeftBorder"))
