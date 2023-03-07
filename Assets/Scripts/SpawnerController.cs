@@ -31,7 +31,7 @@ public class SpawnerController : MonoBehaviour
     private float _currentSpeed;
     private Transform _rootTransform;
     private Rigidbody2D _rigidbody2D;
-    private Vector3 _startingPosition;
+    // private Vector3 _startingPosition;
 
     private static bool _movingRight = true;
 
@@ -45,9 +45,10 @@ public class SpawnerController : MonoBehaviour
         _onCoolDown = false;
         _rootTransform = EnemyParent.transform;
         _rigidbody2D = GetComponent<Rigidbody2D>();
-        _startingPosition = transform.position;
+        // _startingPosition = transform.position;
         Border.OnEnemyHitBorder += OnBorderHit;
         EnemyComplete.OnEnemyAboutToBeDestroyed += OnEnemyDestroyed;
+        Player.OnPlayerOutOfLives += OnGameOver;
         SpawnEnemies();
         StartCoroutine(RandomCoroutine());
     }
@@ -74,10 +75,8 @@ public class SpawnerController : MonoBehaviour
     {
         while (true)
         {
-            Debug.Log("starting");
-            yield return new WaitForSeconds(5f);
+            yield return new WaitForSeconds(8f);
             Instantiate(EnemyRandomPrefab, new Vector3(EnemyRandomSpawn.position.x, EnemyRandomSpawn.position.y, 0), Quaternion.identity);
-            Debug.Log("ending");
         }
     }
 
@@ -96,6 +95,11 @@ public class SpawnerController : MonoBehaviour
     private void OnEnemyDestroyed(int score)
     {
         _currentSpeed += enemyDestroyedSpeedMult;
+    }
+
+    private void OnGameOver()
+    {
+        Destroy(gameObject);
     }
 
     private void MoveDown()

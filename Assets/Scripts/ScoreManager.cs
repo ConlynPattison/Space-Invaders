@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.Mime;
 using TMPro;
 using UnityEngine;
 
@@ -7,14 +8,24 @@ public class ScoreManager : MonoBehaviour
 {
 
     public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI highScoreText;
+    public TextMeshProUGUI gameOverText;
 
     private int _score;
     
     // Start is called before the first frame update
     void Start()
     {
+        gameOverText.gameObject.SetActive(false);
         _score = 0;
+        if (!PlayerPrefs.HasKey("high score"))
+            PlayerPrefs.SetInt("high score", _score);
+
+        var oldHighScoreFormatted = PlayerPrefs.GetInt("high score").ToString("0000");
+        highScoreText.text = $"HI-SCORE\n{oldHighScoreFormatted}";
+        
         EnemyComplete.OnEnemyAboutToBeDestroyed += EnemyOnOnEnemyAboutToBeDestroyed;
+        Player.OnPlayerOutOfLives += ScoreOnPlayerOutOfLives;
     }
 
     private void EnemyOnOnEnemyAboutToBeDestroyed(int score)
@@ -22,7 +33,21 @@ public class ScoreManager : MonoBehaviour
         _score += score;
         var formattedScore = _score.ToString("0000");
         
-        Debug.Log($"event received for tallying the score: {score}");
         scoreText.text = $"SCORE\n{formattedScore}";
+    }
+
+    private void ScoreOnPlayerOutOfLives()
+    {
+        var oldHighScore = PlayerPrefs.GetInt("high score");
+        var sessionScore = _score;
+
+        if (oldHighScore < sessionScore)
+        {
+            PlayerPrefs.SetInt("high score", sessionScore);
+            var newHighScoreFormatted = sessionScore.ToString("0000");
+            highScoreText.text = $"HI-SCORE\n{newHighScoreFormatted}";
+        }
+        
+        gameOverText.gameObject.SetActive(true);
     }
 }

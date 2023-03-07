@@ -10,6 +10,9 @@ public class Player : MonoBehaviour
     public TextMeshProUGUI livesText;
     public float unitsPerSecond = 15f;
     public int initalLives = 3;
+
+    public delegate void PlayerOutOfLives();
+    public static event PlayerOutOfLives OnPlayerOutOfLives;
     
     private Rigidbody2D _rigidBody2D;
     private int _livesRemaining;
@@ -47,9 +50,8 @@ public class Player : MonoBehaviour
             return;
         
         GameObject shot = Instantiate(bulletPrefab, shootOffsetTransform.position, Quaternion.identity, shootOffsetTransform);
-        Debug.Log("Bang!");
 
-        Destroy(shot, 3f);
+        Destroy(shot, 2f);
     }
 
     private void OnCollisionEnter2D(Collision2D col)
@@ -62,6 +64,7 @@ public class Player : MonoBehaviour
         _livesRemaining--;
         if (_livesRemaining < 0)
         {
+            OnPlayerOutOfLives();
             Destroy(gameObject);
         }
         else

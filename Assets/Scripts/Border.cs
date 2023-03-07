@@ -17,8 +17,6 @@ public class Border : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("Trigger Entered");
-        
         if (other.CompareTag("Player") || other.CompareTag("Random"))
             return;
         
