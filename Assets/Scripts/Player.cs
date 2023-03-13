@@ -1,7 +1,6 @@
 ﻿using System;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class Player : MonoBehaviour
 {
@@ -9,11 +8,12 @@ public class Player : MonoBehaviour
     public Transform shootOffsetTransform;
     public TextMeshProUGUI livesText;
     public float unitsPerSecond = 15f;
-    public int initalLives = 3;
+    public int initialLives = 3;
 
     public delegate void PlayerOutOfLives();
     public static event PlayerOutOfLives OnPlayerOutOfLives;
-    
+
+    private Animator _animator;
     private Rigidbody2D _rigidBody2D;
     private int _livesRemaining;
 
@@ -24,8 +24,9 @@ public class Player : MonoBehaviour
     {
         // playerAnimator = GetComponent<Animator>();
         _rigidBody2D = GetComponent<Rigidbody2D>();
-        livesText.text = $"{initalLives}";
-        _livesRemaining = initalLives;
+        _animator = GetComponent<Animator>();
+        livesText.text = $"{initialLives}";
+        _livesRemaining = initialLives;
     }
 
     //-----------------------------------------------------------------------------
@@ -48,6 +49,8 @@ public class Player : MonoBehaviour
         // playerAnimator.SetTrigger("ShootTrigger");
         if (shootOffsetTransform.hierarchyCount != 2)
             return;
+        
+        _animator.SetTrigger("Shooting");
         
         GameObject shot = Instantiate(bulletPrefab, shootOffsetTransform.position, Quaternion.identity, shootOffsetTransform);
 
