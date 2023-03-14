@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -15,25 +16,30 @@ public class Player : MonoBehaviour
 
     private Animator _animator;
     private Rigidbody2D _rigidBody2D;
+    private Vector3 _respawnPosition;
     private int _livesRemaining;
-
-    // private Animator playerAnimator;
-
+    private bool _inputIsLocked;
+    
     //-----------------------------------------------------------------------------
     void Start()
     {
-        // playerAnimator = GetComponent<Animator>();
         _rigidBody2D = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
-        livesText.text = $"{initialLives}";
+        _respawnPosition = transform.position;
+        
         _livesRemaining = initialLives;
+        _inputIsLocked = false;
+        
+        livesText.text = $"{initialLives}";
+        
+        _animator.SetBool("LivesRemain", true);
     }
 
     //-----------------------------------------------------------------------------
     void Update()
     {
         // Shoot
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && !_inputIsLocked)
         {
             ShotRequested();
         }
@@ -41,6 +47,9 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (_inputIsLocked)
+            return;
+        
         _rigidBody2D.velocity = Input.GetAxis("Horizontal") * unitsPerSecond * Vector2.right;
     }
 
@@ -63,16 +72,30 @@ public class Player : MonoBehaviour
             return;
         
         Destroy(col.gameObject);
-        
+
+        _rigidBody2D.velocity = Vector2.zero;
         _livesRemaining--;
-        if (_livesRemaining < 0)
+        
+        _inputIsLocked = true;
+        _animator.SetTrigger("PlayerDying");
+        
+        if (_livesRemaining < 0) // game ends
         {
+            _animator.SetBool("LivesRemain", false);
             OnPlayerOutOfLives();
             Destroy(gameObject);
         }
-        else
+        else // respawn animation and sequencing
         {
             livesText.text = $"{_livesRemaining}";
+            StartCoroutine(DelayInputUnlock());
         }
+    }
+
+    IEnumerator DelayInputUnlock()
+    {
+        yield return new WaitForSeconds(1.5f);
+        transform.position = _respawnPosition;
+        _inputIsLocked = false;
     }
 }

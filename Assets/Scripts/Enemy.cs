@@ -67,9 +67,11 @@ public class EnemyComplete : MonoBehaviour
             _animator.SetTrigger("EnemyDying");
         }
 
-        // todo - trigger death animation
-        Destroy(collision.gameObject); // destroy bullet
-        StartCoroutine(DelayDestroy()); // destroy self
+        if (!collision.gameObject.CompareTag("Player"))
+        {
+            Destroy(collision.gameObject); // destroy bullet
+            StartCoroutine(DelayDestroy()); // destroy self
+        }
     }
 
     IEnumerator DelayDestroy()

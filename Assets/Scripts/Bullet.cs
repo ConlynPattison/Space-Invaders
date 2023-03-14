@@ -15,6 +15,6 @@ public class Bullet : MonoBehaviour
     //-----------------------------------------------------------------------------
     private void Fire()
     {
-        GetComponent<Rigidbody2D>().velocity = Vector2.up * speed;
+        GetComponent<Rigidbody2D>().velocity = new Vector2(0, speed);
     }
 }
