@@ -38,7 +38,7 @@ public class SpawnerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _enemiesPerRow = 3;
+        _enemiesPerRow = 11;
         _distanceBetweenEnemies = 0.75f;
         _currentSpeed = baseSpeedPerSecond;
         _onCoolDown = false;
