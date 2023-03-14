@@ -10,8 +10,12 @@ public class ScoreManager : MonoBehaviour
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI highScoreText;
     public TextMeshProUGUI gameOverText;
+    public Transform spawnerControllerTransform;
 
     private int _score;
+    
+    public delegate void GameOver();
+    public static event GameOver OnGameOver;
     
     // Start is called before the first frame update
     void Start()
@@ -34,9 +38,23 @@ public class ScoreManager : MonoBehaviour
         var formattedScore = _score.ToString("0000");
         
         scoreText.text = $"SCORE\n{formattedScore}";
+        CheckForEndGame();
     }
 
     private void ScoreOnPlayerOutOfLives()
+    {
+        EndGame();
+    }
+
+    private void CheckForEndGame()
+    {
+        if (spawnerControllerTransform.hierarchyCount == 3)
+        {
+            EndGame();
+        }
+    }
+    
+    private void EndGame()
     {
         var oldHighScore = PlayerPrefs.GetInt("high score");
         var sessionScore = _score;
@@ -49,5 +67,7 @@ public class ScoreManager : MonoBehaviour
         }
         
         gameOverText.gameObject.SetActive(true);
+
+        OnGameOver();
     }
 }

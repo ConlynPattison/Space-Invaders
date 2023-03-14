@@ -677,7 +677,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 615668449}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: afba9c21c23244f95805cbf5a5b47a99, type: 2}
   m_CullingMode: 0
@@ -833,7 +833,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 861643484}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: afba9c21c23244f95805cbf5a5b47a99, type: 2}
   m_CullingMode: 0
@@ -1069,6 +1069,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameSceneName: SpaceInvaders
+  creditsSceneName: Credits
+  menuSceneName: Menu
 --- !u!4 &944537257
 Transform:
   m_ObjectHideFlags: 0
@@ -1478,7 +1480,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1382587258}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: afba9c21c23244f95805cbf5a5b47a99, type: 2}
   m_CullingMode: 0
@@ -1827,7 +1829,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1403581477}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 944537256}
+        m_TargetAssemblyTypeName: SceneSwitcher, Assembly-CSharp
+        m_MethodName: LoadCreditsScene
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1403581477
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1933,7 +1947,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1457298040}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: afba9c21c23244f95805cbf5a5b47a99, type: 2}
   m_CullingMode: 0

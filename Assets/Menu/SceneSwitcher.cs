@@ -6,26 +6,41 @@ using UnityEngine.SceneManagement;
 public class SceneSwitcher : MonoBehaviour
 {
     public string gameSceneName;
-
+    public string creditsSceneName;
+    public string menuSceneName;
+    
     void Start()
     {
-        GameObject.DontDestroyOnLoad(this.gameObject);
+        DontDestroyOnLoad(gameObject);
+        ScoreManager.OnGameOver += LoadCreditsScene;
     }
 
     public void LoadGameScene()
     {
-        StartCoroutine(LoadAndSetup());
+        StartCoroutine(LoadAndSetup(gameSceneName));
     }
 
-    IEnumerator LoadAndSetup()
+    public void LoadCreditsScene()
     {
-        SceneManager.LoadScene(gameSceneName, LoadSceneMode.Single);
-        Debug.Log("load started");
+        StartCoroutine(LoadAndSetup(creditsSceneName));
+        StartCoroutine(DelayedLoadMenuScene());
+    }
+
+    public void LoadMenuScene()
+    {
+        StartCoroutine(LoadAndSetup(menuSceneName));
+    }
+
+    IEnumerator DelayedLoadMenuScene()
+    {
+        yield return new WaitForSeconds(10f);
+        LoadMenuScene();
+    }
+
+    IEnumerator LoadAndSetup(string sceneName)
+    {
+        SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
+        yield return new WaitForSeconds(0.1f);
         
-        // wait 1 frame for loading to complete
-        yield return null;
-        
-        Player player = GameObject.FindObjectOfType<Player>();
-        Debug.Log($"Found {player.name}");
     }
 }

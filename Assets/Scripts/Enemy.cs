@@ -70,13 +70,13 @@ public class EnemyComplete : MonoBehaviour
         if (!collision.gameObject.CompareTag("Player"))
         {
             Destroy(collision.gameObject); // destroy bullet
-            StartCoroutine(DelayDestroy()); // destroy self
+            StartCoroutine(DelayDestroy(_isRandomEnemy ? 0.1f : 0.5f)); // destroy self
         }
     }
 
-    IEnumerator DelayDestroy()
+    IEnumerator DelayDestroy(float secondsDelay)
     {
-        yield return new WaitForSeconds(0.25f);
+        yield return new WaitForSeconds(secondsDelay);
         Destroy(gameObject);
     }
 

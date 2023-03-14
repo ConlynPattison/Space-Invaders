@@ -1530,6 +1530,7 @@ MonoBehaviour:
   scoreText: {fileID: 1036744884}
   highScoreText: {fileID: 1391350245}
   gameOverText: {fileID: 1128496411}
+  spawnerControllerTransform: {fileID: 6584214}
 --- !u!4 &1087083799
 Transform:
   m_ObjectHideFlags: 0

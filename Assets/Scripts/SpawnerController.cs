@@ -23,7 +23,6 @@ public class SpawnerController : MonoBehaviour
     public float baseSpeedPerSecond = 0.1f;
     public float enemyDestroyedSpeedMult = 0.01f;
 
-    // private int _roundsCompleted;
     private int _enemiesPerRow;
     private bool _onCoolDown;
     private float _distanceBetweenEnemies;
@@ -31,7 +30,6 @@ public class SpawnerController : MonoBehaviour
     private float _currentSpeed;
     private Transform _rootTransform;
     private Rigidbody2D _rigidbody2D;
-    // private Vector3 _startingPosition;
 
     private static bool _movingRight = true;
 
@@ -45,7 +43,6 @@ public class SpawnerController : MonoBehaviour
         _onCoolDown = false;
         _rootTransform = EnemyParent.transform;
         _rigidbody2D = GetComponent<Rigidbody2D>();
-        // _startingPosition = transform.position;
         Border.OnEnemyHitBorder += OnBorderHit;
         EnemyComplete.OnEnemyAboutToBeDestroyed += OnEnemyDestroyed;
         Player.OnPlayerOutOfLives += OnGameOver;
