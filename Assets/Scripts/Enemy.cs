@@ -5,19 +5,21 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using Random = UnityEngine.Random;
 
+[RequireComponent(typeof(AudioSource))]
 public class EnemyComplete : MonoBehaviour
 {
 
     public int scorePerHit = 0;
     public float randomEnemySpeed = 3f;
     public float castOffset = 0.25f;
-
     public GameObject bulletPrefab;
+    public AudioClip destroyedClip;
 
     public delegate void EnemyDestroyed(int score);
     public static event EnemyDestroyed OnEnemyAboutToBeDestroyed;
 
     private Animator _animator;
+    private AudioSource _source;
     private bool _isRandomEnemy;
 
     private static float _shootChance = 0.1f;
@@ -25,6 +27,7 @@ public class EnemyComplete : MonoBehaviour
     private void Start()
     {
         _isRandomEnemy = CompareTag("Random");
+        _source = GetComponent<AudioSource>();
         if (!_isRandomEnemy)
         {
             _animator = GetComponent<Animator>();
@@ -32,6 +35,12 @@ public class EnemyComplete : MonoBehaviour
         }
 
         GetComponent<Rigidbody2D>().velocity = Vector2.right * randomEnemySpeed;
+    }
+
+    private void OnDestroy()
+    {
+        if (!_isRandomEnemy)
+            ScoreManager.EnemiesHit++;
     }
 
     private void Update()
@@ -58,7 +67,8 @@ public class EnemyComplete : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-
+        _source.PlayOneShot(destroyedClip);
+        
         if (_isRandomEnemy)
             OnEnemyAboutToBeDestroyed(Random.Range(3, 8) * 50);
         else
@@ -70,7 +80,7 @@ public class EnemyComplete : MonoBehaviour
         if (!collision.gameObject.CompareTag("Player"))
         {
             Destroy(collision.gameObject); // destroy bullet
-            StartCoroutine(DelayDestroy(_isRandomEnemy ? 0.1f : 0.5f)); // destroy self
+            StartCoroutine(DelayDestroy(_isRandomEnemy ? 0.1f : 0.4f)); // destroy self
         }
     }
 

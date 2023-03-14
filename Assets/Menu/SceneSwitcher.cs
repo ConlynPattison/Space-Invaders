@@ -1,34 +1,58 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+[RequireComponent(typeof(AudioSource))]
 public class SceneSwitcher : MonoBehaviour
 {
     public string gameSceneName;
     public string creditsSceneName;
     public string menuSceneName;
-    
+    public AudioClip uiClip;
+
+    private AudioSource _source;
     void Start()
     {
         DontDestroyOnLoad(gameObject);
-        ScoreManager.OnGameOver += LoadCreditsScene;
+        _source = GetComponent<AudioSource>();
+        ScoreManager.OnGameOver += DelayedLoadCreditsScene;
+    }
+
+    private void OnDestroy()
+    {
+        ScoreManager.OnGameOver -= DelayedLoadCreditsScene;
     }
 
     public void LoadGameScene()
     {
+        _source.PlayOneShot(uiClip);
         StartCoroutine(LoadAndSetup(gameSceneName));
     }
 
     public void LoadCreditsScene()
     {
+        _source.PlayOneShot(uiClip);
         StartCoroutine(LoadAndSetup(creditsSceneName));
         StartCoroutine(DelayedLoadMenuScene());
     }
 
     public void LoadMenuScene()
     {
+        _source.PlayOneShot(uiClip);
         StartCoroutine(LoadAndSetup(menuSceneName));
+    }
+    
+    public void DelayedLoadCreditsScene()
+    {
+        StartCoroutine(GameEnded());
+    }
+
+    IEnumerator GameEnded()
+    {
+        yield return new WaitForSeconds(5f);
+        LoadCreditsScene();
     }
 
     IEnumerator DelayedLoadMenuScene()
@@ -40,7 +64,10 @@ public class SceneSwitcher : MonoBehaviour
     IEnumerator LoadAndSetup(string sceneName)
     {
         SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
-        yield return new WaitForSeconds(0.1f);
         
+        if (sceneName.Equals("Menu"))
+            Destroy(gameObject);
+        
+        yield return new WaitForSeconds(0.5f);
     }
 }

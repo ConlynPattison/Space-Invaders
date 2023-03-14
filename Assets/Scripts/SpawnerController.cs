@@ -23,6 +23,8 @@ public class SpawnerController : MonoBehaviour
     public float baseSpeedPerSecond = 0.1f;
     public float enemyDestroyedSpeedMult = 0.01f;
 
+    public static int EnemiesSpawned;
+
     private int _enemiesPerRow;
     private bool _onCoolDown;
     private float _distanceBetweenEnemies;
@@ -36,8 +38,7 @@ public class SpawnerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // _roundsCompleted = 0;
-        _enemiesPerRow = 11;
+        _enemiesPerRow = 3;
         _distanceBetweenEnemies = 0.75f;
         _currentSpeed = baseSpeedPerSecond;
         _onCoolDown = false;
@@ -48,6 +49,8 @@ public class SpawnerController : MonoBehaviour
         Player.OnPlayerOutOfLives += OnGameOver;
         SpawnEnemies();
         StartCoroutine(RandomCoroutine());
+
+        EnemiesSpawned = _enemiesPerRow * 5;
     }
 
     private void FixedUpdate()
@@ -66,6 +69,13 @@ public class SpawnerController : MonoBehaviour
             _onCoolDown = false;
             _endDownTime = 0f;
         }
+    }
+
+    private void OnDestroy()
+    {
+        Border.OnEnemyHitBorder -= OnBorderHit;
+        EnemyComplete.OnEnemyAboutToBeDestroyed -= OnEnemyDestroyed;
+        Player.OnPlayerOutOfLives -= OnGameOver;
     }
 
     IEnumerator RandomCoroutine()

@@ -3,11 +3,13 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 
+[RequireComponent(typeof(AudioSource))]
 public class Player : MonoBehaviour
 {
     public GameObject bulletPrefab;
     public Transform shootOffsetTransform;
     public TextMeshProUGUI livesText;
+    public AudioClip destroyClip;
     public float unitsPerSecond = 15f;
     public int initialLives = 3;
 
@@ -16,6 +18,7 @@ public class Player : MonoBehaviour
 
     private Animator _animator;
     private Rigidbody2D _rigidBody2D;
+    private AudioSource _source;
     private Vector3 _respawnPosition;
     private int _livesRemaining;
     private bool _inputIsLocked;
@@ -25,6 +28,7 @@ public class Player : MonoBehaviour
     {
         _rigidBody2D = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
+        _source = GetComponent<AudioSource>();
         _respawnPosition = transform.position;
         
         _livesRemaining = initialLives;
@@ -77,6 +81,7 @@ public class Player : MonoBehaviour
         _livesRemaining--;
         
         _inputIsLocked = true;
+        _source.PlayOneShot(destroyClip);
         _animator.SetTrigger("PlayerDying");
         
         if (_livesRemaining < 0) // game ends
@@ -94,7 +99,7 @@ public class Player : MonoBehaviour
 
     IEnumerator DelayInputUnlock()
     {
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1.25f);
         transform.position = _respawnPosition;
         _inputIsLocked = false;
     }

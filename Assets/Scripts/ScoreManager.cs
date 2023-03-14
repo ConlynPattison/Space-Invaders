@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net.Mime;
@@ -10,9 +11,10 @@ public class ScoreManager : MonoBehaviour
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI highScoreText;
     public TextMeshProUGUI gameOverText;
-    public Transform spawnerControllerTransform;
 
     private int _score;
+
+    public static int EnemiesHit;
     
     public delegate void GameOver();
     public static event GameOver OnGameOver;
@@ -22,6 +24,7 @@ public class ScoreManager : MonoBehaviour
     {
         gameOverText.gameObject.SetActive(false);
         _score = 0;
+        EnemiesHit = 0;
         if (!PlayerPrefs.HasKey("high score"))
             PlayerPrefs.SetInt("high score", _score);
 
@@ -30,6 +33,12 @@ public class ScoreManager : MonoBehaviour
         
         EnemyComplete.OnEnemyAboutToBeDestroyed += EnemyOnOnEnemyAboutToBeDestroyed;
         Player.OnPlayerOutOfLives += ScoreOnPlayerOutOfLives;
+    }
+
+    private void OnDestroy()
+    {
+        EnemyComplete.OnEnemyAboutToBeDestroyed -= EnemyOnOnEnemyAboutToBeDestroyed;
+        Player.OnPlayerOutOfLives -= ScoreOnPlayerOutOfLives;
     }
 
     private void EnemyOnOnEnemyAboutToBeDestroyed(int score)
@@ -48,12 +57,10 @@ public class ScoreManager : MonoBehaviour
 
     private void CheckForEndGame()
     {
-        if (spawnerControllerTransform.hierarchyCount == 3)
-        {
+        if (EnemiesHit == SpawnerController.EnemiesSpawned)
             EndGame();
-        }
     }
-    
+
     private void EndGame()
     {
         var oldHighScore = PlayerPrefs.GetInt("high score");
